@@ -70,3 +70,15 @@
   )
 )
 
+(define-public (redeem-item (item-id uint))
+  (let (
+    (item (unwrap! (map-get? items item-id) (err u1)))
+    (user-balance (ft-get-balance loyalty-token tx-sender))
+  )
+    (asserts! (get is-available item) (err u2))
+    (asserts! (>= user-balance (get price item)) (err u3))
+    (try! (ft-burn? loyalty-token (get price item) tx-sender))
+    (map-set items item-id (merge item {is-available: false}))
+    (ok true)
+  )
+)
