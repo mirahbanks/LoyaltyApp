@@ -82,3 +82,12 @@
     (ok true)
   )
 )
+
+(define-read-only (get-item-details (item-id uint))
+  (map-get? items item-id)
+)
+
+;; Initialize the contract
+(begin
+  (try! (ft-mint? loyalty-token u0 contract-owner))
+)
