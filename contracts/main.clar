@@ -59,3 +59,14 @@
   )
 )
 
+(define-public (add-item (name (string-ascii 64)) (price uint))
+  (begin
+    (asserts! (is-eq tx-sender contract-owner) err-owner-only)
+    (let ((new-id (+ (var-get item-count) u1)))
+      (map-set items new-id {name: name, price: price, is-available: true})
+      (var-set item-count new-id)
+      (ok new-id)
+    )
+  )
+)
+
