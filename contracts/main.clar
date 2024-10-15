@@ -49,3 +49,13 @@
 (define-read-only (get-total-supply)
   (ok (ft-get-supply loyalty-token))
 )
+
+(define-public (earn-tokens (user principal) (activity-points uint))
+  (begin
+    (asserts! (is-eq tx-sender contract-owner) err-owner-only)
+    (try! (ft-mint? loyalty-token (* activity-points u1000000) user))
+    (map-set user-activity user (+ (default-to u0 (map-get? user-activity user)) activity-points))
+    (ok true)
+  )
+)
+
